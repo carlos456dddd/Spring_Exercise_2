@@ -8,7 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 
 
-@Table(name = "user")
+@Table(name = "users")
 @Entity
 @Getter
 @Setter
@@ -28,6 +28,11 @@ public class User {
     private String password;
     private Boolean enable = true;
 
+    public enum Role {
+        SELLER,
+        ADMIN
+    }
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -36,7 +41,7 @@ public class User {
     @Column(name = "updated_at", updatable = true)
     private LocalDateTime updatedAt;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "role_id")
+    @Enumerated(EnumType.STRING)
     private Role role;
+
 }
