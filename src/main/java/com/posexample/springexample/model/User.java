@@ -1,5 +1,6 @@
 package com.posexample.springexample.model;
 
+import com.posexample.springexample.model.Enum.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -28,17 +29,12 @@ public class User {
     private String password;
     private Boolean enable = true;
 
-    public enum Role {
-        SELLER,
-        ADMIN
-    }
-
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
-    @Column(name = "updated_at", updatable = true)
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     @Enumerated(EnumType.STRING)
