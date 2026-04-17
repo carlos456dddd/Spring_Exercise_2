@@ -20,4 +20,4 @@ jobs:
         uses: docker/build-push-action@v7
         with:
           push: true
-          tag: ghrc.io/carlos456dddd/Spring_Exercise_2:latest
+          tags: ghrc.io/carlos456dddd/Spring_Exercise_2:latest
