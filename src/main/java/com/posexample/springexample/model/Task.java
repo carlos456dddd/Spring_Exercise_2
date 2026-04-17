@@ -37,6 +37,14 @@ public class Task {
     @Column(name = "task_priority", nullable = false)
     private TaskPriority priority;
 
+    @ManyToOne
+    @JoinColumn(name = "project_id", nullable = false, referencedColumnName = "id")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "assigned_user_id", nullable = false, referencedColumnName = "id")
+    private Project project;
+
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
