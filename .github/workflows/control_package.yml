@@ -30,4 +30,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/carlos456dddd/Spring_Exercise_2:latest
+          tags: ghcr.io/carlos456dddd/spring_exercise_2:latest
