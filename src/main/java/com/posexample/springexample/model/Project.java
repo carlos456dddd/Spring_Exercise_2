@@ -22,7 +22,9 @@ public class Project {
     @Column (length = 20, nullable = false)
     private String name;
 
+    @Column(nullable = false)
     private String description;
+
     @CreatedDate
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
