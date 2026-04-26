@@ -2,6 +2,6 @@ package com.posexample.springexample.dto;
 
 import java.time.LocalDateTime;
 
-public record projectRequest(Long Id,
-                             String name) {
+public record projectRequest(String name,
+                             String description) {
 }
