@@ -38,11 +38,11 @@ public class Task {
     private TaskPriority priority;
 
     @ManyToOne
-    @JoinColumn(name = "project_id", nullable = false, referencedColumnName = "id")
+    @JoinColumn(name = "project_id", referencedColumnName = "id")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "assigned_user_id", nullable = false, referencedColumnName = "id")
+    @JoinColumn(name = "assigned_user_id", referencedColumnName = "id")
     private Project project;
 
     @CreationTimestamp
