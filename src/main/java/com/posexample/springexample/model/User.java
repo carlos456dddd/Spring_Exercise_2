@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class User {
 
     @Id
@@ -39,5 +40,4 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private Role role;
-
 }
