@@ -1,5 +1,4 @@
 package com.posexample.springexample.service;
-
 import com.posexample.springexample.dto.userRequest;
 import com.posexample.springexample.dto.userResponse;
 import com.posexample.springexample.model.User;
@@ -50,11 +49,16 @@ public class userService {
 //    @Enumerated(EnumType.STRING)
 //    private Role role;
 
-    public userResponse createUser(User user) {
+    public userResponse createUser(userRequest user) {
         //Según lo que entiendo tendría ya comprobada la información por el DTO encargado de el request
         //Ya que tengo encargada la información del request y esta comprobado que se tiene los datos podría crear la clase User y mandarla
         //Para guardarla y tenerla en la base de datos
-        User a = userRepo.save(user);
+        User java = User.builder()
+                .username(user.username())
+                .email(user.email())
+                .password(user.password()).build();
+
+        User a = userRepo.save(java);
         return new userResponse(
                 a.getId(),
                 a.getUsername(),
