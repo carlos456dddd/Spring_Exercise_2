@@ -24,6 +24,7 @@
                                     "/",
                                     "/api/public",
                                     "/users/**",
+                                    "/projects/**",
                                     "/api/public/**")
                             .permitAll()
 

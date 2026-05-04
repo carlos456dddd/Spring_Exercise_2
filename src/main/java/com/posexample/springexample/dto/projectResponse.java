@@ -1,10 +1,14 @@
 package com.posexample.springexample.dto;
 
+import lombok.Builder;
+
 import java.time.LocalDateTime;
 
+@Builder
 public record projectResponse(Long Id,
                               String name,
                               String description,
-                              LocalDateTime created_at,
-                              Long Id_user) {
+                              Long IdUser,
+                              LocalDateTime createdAt
+                             ) {
 }
