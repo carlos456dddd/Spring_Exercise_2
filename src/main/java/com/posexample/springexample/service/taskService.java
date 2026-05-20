@@ -1,6 +1,8 @@
 package com.posexample.springexample.service;
 
-import com.posexample.springexample.dto.taskResponse;
+import com.posexample.springexample.dto.TaskResponse;
+import com.posexample.springexample.dto.projectResponse;
+import com.posexample.springexample.dto.taskRequest;
 import com.posexample.springexample.dto.userResponse;
 import com.posexample.springexample.model.Enum.TaskStatus;
 import com.posexample.springexample.model.Project;
@@ -10,9 +12,9 @@ import com.posexample.springexample.repository.projectRepository;
 import com.posexample.springexample.repository.taskRepository;
 import com.posexample.springexample.repository.userRepository;
 import jakarta.transaction.Transactional;
+import org.jspecify.annotations.NonNull;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -30,42 +32,69 @@ public class taskService {
 
     }
 
-    public taskResponse createTask(Task task) {
-        //Voy a suponer que ya se que estoy autenticado
+    public TaskResponse createTask(taskRequest task, String name) {
+        TaskResponse taskResponse = null;
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        // 2. Verificar si está autenticado
+        try {
+//            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//            if (authentication != null && authentication.isAuthenticated()) {
+                User user_response = userRepo.findByUsername(name);
 
-        if (authentication != null && authentication.isAuthenticated()) {
-            // El principal suele ser un UserDetails (o tu entidad de usuario personalizada)
-            Object principal = authentication.getPrincipal();
-            authentication.getName();
-            User user_response = userRepo.findByUsername(authentication.getName());
-            task.setUser(user_response);
-            Task a = taskRepo.save(task);
-            return new taskResponse(a.getId(), a.getTitle(), a.getDescription(), a.getStatus().name(), a.getCreatedAt());
+                Task rpt = taskRepo.save(Task.builder()
+                        .title(task.title())
+                        .description(task.description())
+                        .user(user_response)
+                        .build());
+
+                taskResponse = toTaskRepospose(rpt).user(userResponse.builder()
+                        .Id(rpt.getUser().getId())
+                        .username(rpt.getUser().getUsername())
+                        .build()).build();
+//            }
+        } catch (Exception e) {
+            throw new RuntimeException("No se crea la tarea");
         }
-        //Por el momento lo manejare acá, hasta crear los contoller, esta logica de autenticacion será para otro lado
-        return null;
-        //Como se quien es el usuario?
-        //Diria que se harían comprobaciones de quien es y que esta logeado para poder incluirlo
 
+        return taskResponse;
 
     }
 
-    public taskResponse assingTask(Long id_project, Long id_task) {
+    public TaskResponse assingTask(Long id_project, Long id_task) {
         Task a = taskRepo.findById(id_task).orElseThrow();
         Project b = projectRepo.findById(id_project).orElseThrow();
         a.setProject(b);
         taskRepo.save(a);
-        return new taskResponse(a.getId(), a.getTitle(), a.getDescription(), a.getStatus().name(), a.getCreatedAt());
+
+        return toTaskRepospose(a).project(toProjectResponse(a.getProject())).build();
+
     }
 
-    public taskResponse updateStatus(Long id, TaskStatus status) {
+    public TaskResponse updateStatus(Long id, String status) {
 
-        Task a = taskRepo.findById(id).orElseThrow();
-        a.setStatus(status);
-        return new taskResponse(a.getId(), a.getTitle(), a.getDescription(), a.getStatus().name(), a.getCreatedAt());
+        Task rpt = taskRepo.findById(id).orElseThrow(() -> new RuntimeException("No existe"));
+        rpt.setStatus(TaskStatus.valueOf(status.toUpperCase()));
+        taskRepo.save(rpt);
+
+        return toTaskRepospose(rpt).build();
     }
+
+
+    private TaskResponse.TaskResponseBuilder toTaskRepospose(@NonNull Task a) {
+
+        return TaskResponse.builder()
+                .id(a.getId())
+                .title(a.getTitle())
+                .description(a.getDescription())
+                .status(a.getStatus().name())
+                .created_at(a.getCreatedAt());
+    }
+
+    private projectResponse toProjectResponse(Project a) {
+        return projectResponse.builder()
+                .name(a.getName())
+                .description(a.getDescription())
+                .build();
+    }
+
 
 }
