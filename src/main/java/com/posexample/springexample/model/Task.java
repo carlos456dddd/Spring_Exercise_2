@@ -3,10 +3,7 @@ package com.posexample.springexample.model;
 import com.posexample.springexample.model.Enum.TaskPriority;
 import com.posexample.springexample.model.Enum.TaskStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -17,6 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "tasks")
+@Builder
 public class Task {
 
     @Id
